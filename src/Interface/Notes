@@ -1,0 +1,273 @@
+JAVA Interface in depth :
+
+- What is interface and How to define.
+- Why we need interface.
+- Methods in interface.
+- Fields in an interface.
+- Interface implementation.
+- Nested interface.
+- Difference between Interface and Abstract class.
+
+JAVA 8 Interface features :
+
+- Default method :
+    How to handle the use-case when, class implements multiple interfaces have same name for the default method.
+- Static method.
+- Functional interface.
+
+JAVA 9 Interface features :
+
+- Private method.
+
+
+1. What is interface ?
+
+Ans -> Interface is something which helps 2 system to interact with each other, without one system has to
+ know the details of other.
+ Or, simply we can say interface helps in ABSTRACTION.
+
+2. How to define Interface ?
+
+Ans -> Interface declaration consist of :
+        - Modifier
+        - "interface" keyword
+        - Interface name
+        - Comma separated list of parent interfaces
+        - Body
+     Only public and Default Modifiers are allowed ( Protected and Private are not allowed )
+
+     Example with Public Modifier :
+
+     public interface Bird {
+
+     // no usage.
+     public void fly();
+     }
+
+     Example with Default Modifier :
+
+     interface Bird {
+
+     // no usage
+     public void fly();
+     }
+
+     Comma separated list of parent interfaces ( it can extend from Class ) Example:
+
+     public interface NonFlyingBirds extends Bird,LivingThings {
+
+     // no usage
+      public void canRun();
+     }
+
+3. Why we need an Interface ?
+
+Ans -> 1. Abstraction : Using interface, we can achieve full Abstraction means, we can define WHAT class must do,
+                        but not HOW it will do.
+
+                        Example :
+                        public interface Bird {
+
+                            // no usage
+                            public void fly();
+                        }
+
+        2. Polymorphism :
+                        (i)  Interface can be used as a Data Type.
+                        (ii) we cannot create the object of an interface, but it can hold the reference of all the
+                             classes which implements it.And at runtime, it decide which method need to be invoked.
+
+                             Example : 1 ( see code )
+
+        3. Multiple Inheritance :
+           In java Multiple inheritance is possible only through Interface only. A class cannot extend 2 different
+           classes.
+
+           In classes it is not allowed due to ambiguity ( complier gets confused ) to class function of which
+           parent class.
+
+           Diamond Problem :
+           Example : 2 ( see code )
+
+4. Methods in Interface :
+
+- All Methods are implicitly public only.
+- Method can not be declared as final.
+
+public interface Bird
+{
+        // fly is also public by default
+        // Method cannot be declared as final bcz if it is final then its child cannot able to override this.
+        void fly();
+        public void hasBeak();
+}
+
+5. Fields in Interface :
+
+- Fields are public,static and final implicitly ( CONSTANTS ) // static and final used together to make a variable constant.
+- You can not make field private or protected. // Implicitly they are public.
+
+
+  Example :      1.   public interface Bird {
+
+                    int MAX_HEIGHT_IN_FEET = 2000;
+                    }
+
+                 2.   public interface Bird {
+
+                    public static final int MAX_HEIGHT_IN_FEET = 2000;
+                    }
+
+6. Interface Implementation :
+
+- Overriding method can not have more restrict access specifiers.
+- Concrete class must override all the methods declared in the interface.
+- Abstract classes are not forced to override all the methods.
+- A class can implement from multiple interfaces.
+
+
+Ex of 1st point : In interface if a method is public it has to be public we cannot lower it down in child class.
+                  Like : a method fly() in interface is public we cannot do it protected fly() in child class
+
+Ex of 2nd point : Class which implement the interface must override all the method declared in the interface.
+
+Ex of 3rd point : If abstract class implements an interface then overriding all methods of interface is not compulsory.But
+                  concrete class must override all methods of parent.
+
+7. Nested Interface : ( Less important )
+
+- Nested interface declared within another interface.
+- Nested interface declared within a class.
+
+Generally it is used to group, logical related interfaced. And nested interface
+
+Rules :
+
+- A nested interface declared within an interface must be public.
+- A nested interface declared within a class can have any access modifier.
+- When you implement outer interface, inner interface implementation is not required and vice versa.
+
+1. Interface within an Interface :
+
+        public interface Bird
+        {
+            public void canFly();
+            // Below interface must be public.
+            public interface NonFlyingBird
+            {
+                public void canRun();
+            }
+        }
+
+         public class Eagle implement Bird
+         {
+             @override
+             public void canFly()
+             {
+                     // Implementation goes here.
+             }
+         }
+
+        public class Eagle implement Bird.NonFlyingBird
+        {
+           @override
+           public void canRun()
+           {
+             // Implementation goes here.
+           }
+        }
+
+
+
+2. Interface within a class :
+
+
+         public class Bird
+         {
+             protected interface NonFLyingBird
+             {
+                public void canRun();
+             }
+         }
+
+8. Difference between Interface and Abstract class :
+
+
+|S.No|                           Abstract class                                    |                               Interface                            |
+| -- | --------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| 1  | Keyword used here is abstract                                               | Keyword used here is interface
+| 2  | Child class need to use keyword extends                                     | Child class need to use keyword implement
+| 3  | It can have both abstract and non abstract method                           | It can have only abstract method ( from Java 8 onwards it can have default,
+                                                                                     static and private method too, where we can provide implementation.
+| 4  | It can Extend from Another class and multiple interfaces                    | It can only extends from other interfaces
+| 5  | Variables can be static, non static, final, non final etc.                  | Variables are by default CONSTANTS.( public,static and final )
+| 6  | Variables and Methods can be private, protected, public, default            | Variables and methods are by default public ( In Java 9, private method is supported )
+| 7  | Multiple Inheritance is not supported                                       | Multiple Inheritance supported with this in JAVA.
+| 8  | It can provide the implementation of the interface                          | It cannot provide implementation of any other interface or abstract class.
+| 9  | It can have constructor                                                     | It cannot have constructor
+| 10 | To declare the method abstract, we have to use abstract keyword ad it         No need for nany keyword to make method abstract. And be default its public.
+        can be protected, public ad default.                                       |
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                                     JAVA 8 & 9 INTERFACE FEATURE
+                                                                     ****************************
+
+1. Default Method ( JAVA 8 ) :
+
+  - Before Java 8, interface can have only Abstract method. And all child classes has to provide abstract method implementation.
+    Disadvantage of previous methods :  Any new method added in interface means need to change in all its implemented methods of child class.
+
+    Example :
+                        public interface Bird
+                        {
+                            // Every class which implement this interface must override canFly methods.
+                            public void canFly();
+                            // Need not override this. ( Can override based on requirement )
+                            default int getMinimumFlyHeight()
+                                {
+                                     return 100;
+                                }
+                        }
+
+2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
