@@ -209,8 +209,8 @@ Rules :
         can be protected, public ad default.                                       |
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-                                                                     JAVA 8 & 9 INTERFACE FEATURE
-                                                                     ****************************
+                                            JAVA 8 & 9 INTERFACE FEATURE
+                                            ****************************
 
 1. Default Method ( JAVA 8 ) :
 
@@ -229,45 +229,128 @@ Rules :
                                 }
                         }
 
-2.
+    Q.) Why default method was introduced ?
+    Ans : To add functionality in existing Legacy Interface we need to use Default method. Example stream() method in Collection.
+
+    Q.) Default and Multiple Inheritance, how to handle it ?
+    Ans : Since there is no any compulsion to override default method of interface but in case of Multiple Inheritance we have to do that :
+
+           Example :  public interface Bird
+                      {
+                        default boolean canBreathe()
+                        {
+                            return true;
+                        }
+                      }
+
+                      public interface LivingThings
+                      {
+                          default boolean canBreathe()
+                          {
+                             return true;
+                          }
+                      }
+
+                      public class Eagle implements Bird, LivingThings
+                      {
+                      // here we have compulsion for overriding the default method of above interface bcz if user create object of eagle and calls
+                         obj.canBreathe then ambiguity arises for compiler.
+                        public boolean canBreathe()
+                        {
+                            return true;
+                        }
+                      }
+
+ 2. Static Method ( JAVA 8 ) - ( public static )
+
+ - We can provide the implementation of the method in interface
+ - But it cannot be overridden by classes which implement the interface.
+ - We can access it using interface name itself.
+ - Its by default is public.
+
+            Example :
+
+            public interface Bird
+            {
+            // Below method is cannot be overridden in child class, we can only use it.
+                static boolean canBreathe()
+                {
+                    return true;
+                }
+            }
+
+            public class Eagle implements Bird
+            {
+                public void digestiveSystemTestMethod()
+                {
+                    if(Bird.canBreathe())
+                    {
+                        // do something...
+                    }
+                }
+            }
+
+
+ 3. Private Method and Private Static Method : ( JAVA 9 )
+
+ - We can provide the implementation of method but as a private access modifier in interface.
+ - It brings more readability of code. For example if multiple default method share some code,then this can help
+ - It can be defined as static and non static.
+ - From static method, we can call only private static interface method.
+ - Private static method, can be called from both static and non static method.
+ - Private interface method can not be abstract. Means we have to provide the definition.
+ - It can be used inside of the particular interface only.
+
+ Example :
+                public interface Bird
+                {
+                    // this is equivalent to public abstract void canFly();
+                    void canFly();
+                    public default void minimumFlyingHeight()
+                    {
+                        myPublicStaticMethod();         // calling static method
+                        myPrivateMethod();              // calling private method
+                        myPrivateStaticMethod();        // calling private static method
+                    }
+
+                    static void myStaticPublicMethod()
+                    {
+                        myPrivateStaticMethod();        // from static we can call other static method only.
+                    }
+                    private void myPrivateMethod ()
+                    {
+                        // implementation
+                    }
+                    private static void myPrivateStaticMethod ()
+                    {
+                        // implementation
+                    }
+                }
 
 
 
+                                        FUNCTIONAL INTERFACE AND LAMBDA EXPRESSION
+               -------------------------------------------------------------------------------------------
+
+- What is Functional interface ?
+- What is Lambda expression ?
+- How to use functional interface with lambda expression ?
+- Advantage of functional interface
+- Types of functional interface
+    - Consumer
+    - Supplier
+    - Function
+    - Predicate
+- How to handle use cases when functional interface extends from other interface ( or functional interface ) ?
 
 
+1. What is Functional Interface ?
 
+- If an interface contains only 1 abstract method, that is known as Functional Interface.
+- Also known as SAM Interface ( Single Abstract Method )
+- @FunctionalInterface keyword ca be used at top of the interface ( But its optional )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Example : example 3 in code
 
 
 
